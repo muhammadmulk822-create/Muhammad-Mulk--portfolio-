@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammad Mulk - Petrol Pump Data Analyst</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/recharts@2.12.7/umd/Recharts.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
+  body { font-family: 'Noto Nastaliq Urdu', sans-serif; background: #0a0f1e; color: #fff; }
+  .neon { color: #00ff88; text-shadow: 0 0 15px #00ff88; }
+  .gold { color: #FFD700; }
+  .card { background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(0,255,136,0.3); transition: 0.3s; }
+  .card:hover { transform: translateY(-5px); border-color: #00ff88; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState } = React;
+const { BarChart, Bar, LineChart, Line, PieChart, Pie, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } = Recharts;
+
+function App() {
+  const [lang, setLang] = useState('ur');
+  const [sale, setSale] = useState(5000);
+  const [price, setPrice] = useState(280);
+  const [profit, setProfit] = useState(12);
+
+  const monthlyProfit = sale * profit * 30;
+  const monthlyLoss = monthlyProfit * 0.02;
+
+  const saleData = [
+    { name: 'ہفتہ 1', sale: 32000 },
+    { name: 'ہفتہ 2', sale: 35000 },
+    { name: 'ہفتہ 3', sale: 31000 },
+    { name: 'ہفتہ 4', sale: 38000 },
+  ];
+
+  const varianceData = [
+    { name: 'POS سیل', value: 98 },
+    { name: 'سٹاک فرق', value: 2 },
+  ];
+
+  const cases = [
+    { title: 'Case #001: The Missing 200L', problem: '2% سٹاک کا فرق', action: 'ATG + POS Integration', result: '12 لاکھ/سال کی بچت' },
+    { title: 'Case #002: Fake Discount', problem: 'کیشئر فراڈ', action: 'Dual Verification', result: '6 لاکھ کی بچت' },
+    { title: 'Case #003: Wrong PO', problem: 'غلط پرچیز آرڈر', action: 'ڈیٹا سے PO Optimization', result: '18% ورکنگ کیپٹل کم' },
+    { title: 'Case #004: Shift Leak', problem: 'نائٹ شفٹ میں لیکیج', action: 'Shift Wise Analysis', result: '9% منافع بڑھا' },
+  ];
+
+  const tech = ['SQL', 'Python', 'PowerBI', 'Excel', 'ATG Integration', 'POS Integration'];
+
+  return (
+    <div>
+      {/* Navbar */}
+      <nav className="p-4 flex justify-between items-center sticky top-0 bg-[#0a0f1e]/80 backdrop-blur z-50">
+        <h1 className="text-xl font-bold neon">Muhammad Mulk</h1>
+        <button onClick={()=>setLang(lang=='ur'?'en':'ur')} className="border border-green-500 px-4 py-2 rounded">
+          {lang=='ur' ? 'English' : 'اردو'}
+        </button>
+      </nav>
+
+      {/* Hero */}
+      <section className="min-h-screen flex items-center justify-center text-center p-6 bg-gradient-to-b from-[#0a0f1e] to-[#001a33]">
+        <div>
+          <h1 className="text-4xl md:text-6xl font-bold">محمد ملک</h1>
+          <p className="text-2xl neon mt-2">Petrol Pump Data Analyst</p>
+          <p className="gold text-xl mt-2">I Turn Fuel Data Into Profit</p>
+          <p className="text-2xl mt-4">کیا آپ کے پمپ سے روز 200 لیٹر غائب ہو رہا ہے؟</p>
+          <p className="text-lg gold">ہر لیٹر کا حساب، ہر روپے کا منافع</p>
+          <div className="mt-6 flex gap-4 justify-center">
+            <a href="https://wa.me/923001234567" className="bg-green-500 hover:bg-green-600 px-8 py-3 rounded-lg font-bold">مفت پمپ آڈٹ کروائیں</a>
+            <a href="#cases" className="border border-green-500 px-8 py-3 rounded-lg font-bold">My Case Studies</a>
+          </div>
+        </div>
+      </section>
+
+      {/* Simulator */}
+      <section className="p-6">
+        <h2 className="text-3xl text-center mb-6 neon">Pump Profit Simulator - LIVE</h2>
+        <div className="max-w-4xl mx-auto card p-6 rounded-xl">
+          <div className="grid md:grid-cols-3 gap-4">
+            <div><label>روزانہ سیل (لیٹر)</label><input type="number" value={sale} onChange={e=>setSale(e.target.value)} className="w-full p-2 rounded bg-gray-800"/></div>
+            <div><label>فی لیٹر ریٹ</label><input type="number" value={price} onChange={e=>setPrice(e.target.value)} className="w-full p-2 rounded bg-gray-800"/></div>
+            <div><label>فی لیٹر منافع</label><input type="number" value={profit} onChange={e=>setProfit(e.target.value)} className="w-full p-2 rounded bg-gray-800"/></div>
+          </div>
+          <div className="mt-6 text-xl text-center">
+            <p>مہینے کا منافع: <span className="neon font-bold">{monthlyProfit.toLocaleString()} PKR</span></p>
+            <p className="text-red-400">2% لیکیج سے نقصان: {monthlyLoss.toLocaleString()} PKR</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6 mt-6">
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={saleData}><XAxis dataKey="name"/><YAxis/><Tooltip/><Line type="monotone" dataKey="sale" stroke="#00ff88"/></LineChart>
+            </ResponsiveContainer>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart><Pie data={varianceData} dataKey="value"><Cell fill="#00ff88"/><Cell fill="#ff0044"/></Pie><Tooltip/></PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </section>
+
+      {/* Case Files */}
+      <section id="cases" className="p-6">
+        <h2 className="text-3xl text-center mb-6 neon">My Petrol Pump Case Files</h2>
+        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          {cases.map((c,i)=>(
+            <div key={i} className="card p-5 rounded-xl">
+              <h3 className="font-bold text-xl gold">{c.title}</h3>
+              <p><b>مسئلہ:</b> {c.problem}</p>
+              <p><b>حل:</b> {c.action}</p>
+              <p className="neon font-bold mt-2">نتیجہ: {c.result}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Tech Stack */}
+      <section className="p-6">
+        <h2 className="text-3xl text-center mb-6 neon">My Tech Stack for Pumps</h2>
+        <div className="flex flex-wrap justify-center gap-4">
+          {tech.map(t=> <div key={t} className="card px-6 py-3 rounded-full">{t}</div>)}
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section className="p-6 text-center">
+        <h2 className="text-3xl neon mb-4">رابطہ کریں</h2>
+        <p>5 سال کا تجربہ پٹرول پمپ ڈیٹا میں</p>
+        <p>WhatsApp: 923001234567</p>
+        <p className="gold">24 گھنٹے میں رپورٹ</p>
+      </section>
+    </div>
+  );
+}
+
+ReactDOM.render(<App/>, document.getElementById('root'));
+</script>
+</body>
+</html>
